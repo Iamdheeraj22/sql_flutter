@@ -12,7 +12,7 @@ class AddStudentPage extends StatefulWidget {
 class _AddStudentState extends State<AddStudentPage> {
   var student_name = "";
   var student_class = "";
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

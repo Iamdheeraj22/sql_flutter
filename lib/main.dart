@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:sql_flutter/AddStudent.dart';
+import 'package:sql_flutter/CustomUi.dart';
 import 'package:sql_flutter/StudentDetails.dart';
 import 'package:sql_flutter/helper.dart';
 
@@ -44,6 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
   onRefresh() async {
     final data = await SqlHelper.getItems();
     _students = data;
+    setState(() {});
+    print(_students);
   }
 
   @override
@@ -80,11 +85,16 @@ class _MyHomePageState extends State<MyHomePage> {
   student(int index) {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-      decoration: BoxDecoration(color: Colors.orange),
+      decoration: BoxDecoration(
+          color: Colors.orange, borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (builder) => StudentDetailsPage()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (builder) => StudentDetailsPage(
+                        index: _students[index]['id'],
+                      ))).then((value) => onRefresh());
         },
         title: Text(
           _students[index]['title'],
@@ -100,9 +110,66 @@ class _MyHomePageState extends State<MyHomePage> {
             Icons.delete,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            deleteDialogBox(index);
+          },
         ),
       ),
     );
+  }
+
+  //Delete the student details
+  deleteStudentDetail(int index) async {
+    await SqlHelper.deleteItem(_students[index]['id']);
+    Navigator.pop(context);
+    showInSnackBar("Student deleted successfully", context);
+    onRefresh();
+    setState(() {});
+  }
+
+  // Show delete dialogbox
+  deleteDialogBox(int index) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            content: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Delete caution"),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Do you want to be student detail?",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Spacer(),
+                      TextButton(
+                          onPressed: () {
+                            deleteStudentDetail(index);
+                          },
+                          child: Text("Delete")),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancel")),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

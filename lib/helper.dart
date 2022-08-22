@@ -42,7 +42,7 @@ class SqlHelper {
   }
 
   // read only one
-  static Future<List<Map<String, dynamic>>> getItem(int id) async {
+  static Future<List<Map<String, Object?>>> getItem(int id) async {
     final db = await SqlHelper.db();
     return db.query('students', where: "id = ?", whereArgs: [id], limit: 1);
   }
