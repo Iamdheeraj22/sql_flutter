@@ -101,7 +101,11 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                SqlHelper.updateItem(widget.index!.toInt(),
+                    controller1.text.toString(), controller2.text.toString());
+                Navigator.pop(context);
+              },
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 35, vertical: 12),

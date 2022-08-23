@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sql_flutter/Model/TableModel.dart';
 
 class SqlHelper {
   //Create table
@@ -71,5 +72,27 @@ class SqlHelper {
     } catch (err) {
       debugPrint("Something went wrong when deleting an item: $err");
     }
+  }
+
+  //All Tables
+  static Future<List<TableModel>> getAllTableNames() async {
+    final db = await SqlHelper.db();
+
+    List<Map> maps =
+        await db.rawQuery('SELECT * FROM sqlite_master ORDER BY name');
+
+    List<TableModel> tableNameList = [];
+    if (maps.isNotEmpty) {
+      for (int i = 0; i < maps.length; i++) {
+        try {
+          tableNameList.add(TableModel(
+              tableName: maps[i]['name'].toString(),
+              tableCreationDate: maps[i]['time'].toString()));
+        } catch (e) {
+          print('Exeption : ' + e.toString());
+        }
+      }
+    }
+    return tableNameList;
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sql_flutter/AddStudent.dart';
+import 'package:sql_flutter/AllTables.dart';
 import 'package:sql_flutter/CustomUi.dart';
 import 'package:sql_flutter/StudentDetails.dart';
 import 'package:sql_flutter/helper.dart';
@@ -69,9 +70,23 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 0.0,
           title: Text(
             widget.title,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => AllTablesPage()))
+                      .then((value) => onRefresh());
+                },
+                icon: const Icon(
+                  Icons.info,
+                  color: Colors.white,
+                ))
+          ],
         ),
         body: Container(
             child: ListView.builder(
