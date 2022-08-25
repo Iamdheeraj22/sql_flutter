@@ -29,3 +29,5 @@ samples, guidance on mobile development, and a full API reference.
   4. delete data
 
   5. update data
+
+  6. delete table

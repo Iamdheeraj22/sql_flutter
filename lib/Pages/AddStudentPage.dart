@@ -3,7 +3,8 @@ import 'package:sql_flutter/CustomUi.dart';
 import 'package:sql_flutter/helper.dart';
 
 class AddStudentPage extends StatefulWidget {
-  AddStudentPage({Key? key}) : super(key: key);
+  String table_name = "";
+  AddStudentPage({Key? key,required this.table_name}) : super(key: key);
 
   @override
   State<AddStudentPage> createState() => _AddStudentState();
@@ -96,7 +97,7 @@ class _AddStudentState extends State<AddStudentPage> {
   }
 
   Future<void> _addItem() async {
-    await SqlHelper.createItem(student_name, student_class);
+    await SqlHelper.createItem(widget.table_name, student_name, student_class);
     print("----------------------");
     Navigator.pop(context);
   }

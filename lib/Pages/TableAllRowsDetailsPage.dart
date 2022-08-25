@@ -34,9 +34,12 @@ class _TableAllRowsDetailsPageState extends State<TableAllRowsDetailsPage> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => AddStudentPage()))
-                .then((value) => onRefresh());
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => AddStudentPage(
+                          table_name: widget.tableName,
+                        ))).then((value) => onRefresh());
           },
           child: const Icon(
             Icons.add,
@@ -104,7 +107,7 @@ class _TableAllRowsDetailsPageState extends State<TableAllRowsDetailsPage> {
 
   //Delete the student details
   deleteStudentDetail(int index) async {
-    await SqlHelper.deleteItem(_students[index]['id']);
+    await SqlHelper.deleteItem(widget.tableName, _students[index]['id']);
     Navigator.pop(context);
     showInSnackBar("Student deleted successfully", context);
     onRefresh();

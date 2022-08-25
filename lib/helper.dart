@@ -5,8 +5,9 @@ import 'package:sql_flutter/Model/TableModel.dart';
 
 class SqlHelper {
   //Create table
-  static Future<void> createTables(sql.Database database) async {
-    await database.execute("""CREATE TABLE students(
+  static Future<void> createTable(String name) async {
+    final db = await SqlHelper.db();
+    await db.execute("""CREATE TABLE $name(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
         class TEXT,
@@ -21,18 +22,19 @@ class SqlHelper {
     return sql.openDatabase(
       'dheerajprajapat.db',
       version: 1,
-      onCreate: (sql.Database database, int version) async {
-        await createTables(database);
-      },
+      // onCreate: (sql.Database database, int version) async {
+      //   await createTable(database);
+      // },
     );
   }
 
   //Insert
-  static Future<int> createItem(String title, String? descrption) async {
+  static Future<int> createItem(
+      String name, String title, String? descrption) async {
     final db = await SqlHelper.db();
 
     final data = {'title': title, 'class': descrption};
-    final id = await db.insert('students', data,
+    final id = await db.insert(name, data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
   }
@@ -66,10 +68,20 @@ class SqlHelper {
   }
 
   //delete
-  static Future<void> deleteItem(int id) async {
+  static Future<void> deleteItem(String n, int id) async {
     final db = await SqlHelper.db();
     try {
-      await db.delete("students", where: "id = ?", whereArgs: [id]);
+      await db.delete(n, where: "id = ?", whereArgs: [id]);
+    } catch (err) {
+      debugPrint("Something went wrong when deleting an item: $err");
+    }
+  }
+
+  //delete table
+  static Future<void> deleteTableItem(String n) async {
+    final db = await SqlHelper.db();
+    try {
+      await db.execute("DROP TABLE IF EXISTS $n");
     } catch (err) {
       debugPrint("Something went wrong when deleting an item: $err");
     }
