@@ -8,3 +8,11 @@ void showInSnackBar(String value, BuildContext context) {
     ),
   );
 }
+
+double phoneHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
+
+double phoneWidth(BuildContext context) {
+  return MediaQuery.of(context).size.width;
+}

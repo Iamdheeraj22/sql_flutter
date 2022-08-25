@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sql_flutter/Model/DatabaseModel.dart';
 import 'package:sql_flutter/Model/TableModel.dart';
 
 class SqlHelper {
@@ -37,9 +38,9 @@ class SqlHelper {
   }
 
   // read all
-  static Future<List<Map<String, dynamic>>> getItems() async {
+  static Future<List<Map<String, dynamic>>> getItems(String tableName) async {
     final db = await SqlHelper.db();
-    return db.query('students', orderBy: "id");
+    return db.query(tableName.toString(), orderBy: "id");
   }
 
   // read only one
